@@ -1,0 +1,22 @@
+{
+  "name": "ppaas",
+  "version": "1.0.0",
+  "description": "Party Parrot as a Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "partyparrot"
+  ],
+  "author": "flguillemette",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^1.6.2",
+    "express": "^4.14.0",
+    "gifencoder": "git+https://github.com/heikkipora/gifencoder.git",
+    "left-pad": "^1.1.3",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  }
+}
