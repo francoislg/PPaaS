@@ -17,6 +17,8 @@ Here is the result: ![Upvote Party Parrot](https://ppaas.herokuapp.com/partyparr
 
 The image is not shown because it is too big and is not rendered in the canvas.
 
+### Overlay Parameters
+
 To solve this problem, it is possible to adjust it the overlay with the following parameters:
 
 * overlayHeight
