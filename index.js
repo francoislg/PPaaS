@@ -33,5 +33,3 @@ app.get("/partyparrot", (req, res, done) => {
         parrotConstructor.finish();
     }
 });
-
-app.listen(3000);
