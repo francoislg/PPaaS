@@ -4,7 +4,7 @@ const ParrotFrameHandler = require("./ParrotFrameHandler");
 const ImageFactory = require("./ImageFactory");
 const config = require("./config");
 
-function ParrotConstructor(writeStream, baseParrot, delay) {
+function ParrotConstructor(writeStream, parrotConstructorConfiguration) {
     this.parrotFrameHandlers = [];
     this.imageFactory = new ImageFactory();
 
@@ -13,9 +13,9 @@ function ParrotConstructor(writeStream, baseParrot, delay) {
     this.encoder.start();
     this.encoder.setTransparent("#000000");
     this.encoder.setRepeat(0);
-    this.encoder.setDelay(delay || 40);
+    this.encoder.setDelay(parrotConstructorConfiguration.delay || 40);
 
-    this.setBaseParrot(baseParrot || "parrot");
+    this.setBaseParrot(parrotConstructorConfiguration.baseParrot || "parrot");
 }
 
 ParrotConstructor.prototype.setBaseParrot = function(parrotType) {

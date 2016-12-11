@@ -29,3 +29,11 @@ To solve this problem, it is possible to adjust it the overlay with the followin
 https://ppaas.herokuapp.com/partyparrot?overlay=http://i.imgur.com/QJ41dQb.png&overlayWidth=15&overlayHeight=15&overlayOffsetX=-7&overlayOffsetY=-3
 
 Here is the result: ![Upvote Party Parrot](https://ppaas.herokuapp.com/partyparrot?overlay=http://i.imgur.com/QJ41dQb.png&overlayWidth=15&overlayHeight=15&overlayOffsetX=-7&overlayOffsetY=-3 "Upvote Party Parrot")
+
+## Delay
+
+You can adjust the delay between frames using the delay query parameter: 
+
+https://ppaas.herokuapp.com/partyparrot?delay=20
+
+Here is the result: ![Fast Parrot](https://ppaas.herokuapp.com/partyparrot?delay=20 "Fast Parrot")

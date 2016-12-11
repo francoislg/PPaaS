@@ -5,22 +5,22 @@ const request = require("request-promise");
 
 var app = express();
 
-app.all("/partyparrot", (req, res, next) => {
-    console.log("request received");
-    next();
+app.get("/partyparrot", (req, res, done) => {
+    handleRequest(res, req.query);
 });
 
-app.get("/partyparrot", (req, res, done) => {
-    let fileName = "test.gif";
+function handleRequest(res, queryParams) {
+    let fileName = "generatedparrot.gif";
     res.writeHead(200, { "Content-Type":"image/gif" });
-    let parrotConstructor = new ParrotConstructor(res);
+
+    let parrotConstructor = new ParrotConstructor(res, queryParams);
     var promises = [];
-    if(req.query.overlay) {
-        var overlayPromise = parrotConstructor.addFollowingOverlayImage(req.query.overlay, 
-                                                                        parseInt(req.query.overlayOffsetX), 
-                                                                        parseInt(req.query.overlayOffsetY),
-                                                                        req.query.overlayWidth,
-                                                                        req.query.overlayHeight);
+    if(queryParams.overlay) {
+        var overlayPromise = parrotConstructor.addFollowingOverlayImage(queryParams.overlay, 
+                                                                        parseInt(queryParams.overlayOffsetX), 
+                                                                        parseInt(queryParams.overlayOffsetY),
+                                                                        queryParams.overlayWidth,
+                                                                        queryParams.overlayHeight);
         promises.push(overlayPromise);
     }
     if (promises.length > 0) {
@@ -32,6 +32,6 @@ app.get("/partyparrot", (req, res, done) => {
     } else {
         parrotConstructor.finish();
     }
-});
+}
 
 app.listen(process.env.PORT || 8080);
