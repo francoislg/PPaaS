@@ -9,12 +9,21 @@ app.get("/partyparrot", (req, res, done) => {
     handleRequest(res, req.query);
 });
 
+app.get("/partyparrot/:baseparrot", (req, res, done) => {
+    req.query.baseparrot = req.params.baseparrot;
+    handleRequest(res, req.query);
+});
+
 function handleRequest(res, queryParams) {
     let fileName = "generatedparrot.gif";
     res.writeHead(200, { "Content-Type":"image/gif" });
 
     let parrotConstructor = new ParrotConstructor(res, queryParams);
     var promises = [];
+    if(queryParams.baseparrot) {
+        parrotConstructor.setBaseParrot(queryParams.baseparrot);
+    }
+
     if(queryParams.overlay) {
         var overlayPromise = parrotConstructor.addFollowingOverlayImage(queryParams.overlay, 
                                                                         parseInt(queryParams.overlayOffsetX), 

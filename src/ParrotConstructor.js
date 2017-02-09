@@ -1,11 +1,11 @@
 const GIFEncoder = require('gifencoder');
 const ParrotFramesReader = require("./ParrotFramesReader");
 const ParrotFrameHandler = require("./ParrotFrameHandler");
+const ParrotConfig = require("./ParrotConfig");
 const ImageFactory = require("./ImageFactory");
 const config = require("./config");
 
 function ParrotConstructor(writeStream, parrotConstructorConfiguration) {
-    this.parrotFrameHandlers = [];
     this.imageFactory = new ImageFactory();
 
     this.encoder = new GIFEncoder(config.WIDTH, config.HEIGHT);
@@ -19,7 +19,18 @@ function ParrotConstructor(writeStream, parrotConstructorConfiguration) {
 }
 
 ParrotConstructor.prototype.setBaseParrot = function(parrotType) {
-    let framesReader = new ParrotFramesReader(parrotType);
+    this.parrotConfig = new ParrotConfig(parrotType);
+}
+
+ParrotConstructor.prototype.getFramesHandlers = function() {
+    if(!this.parrotFrameHandlers) {
+        this.initializeFramesHandlers();
+    }
+    return this.parrotFrameHandlers;
+}
+
+ParrotConstructor.prototype.initializeFramesHandlers = function() {
+    let framesReader = new ParrotFramesReader(this.parrotConfig);
 
     this.parrotFrameHandlers = framesReader.getFrames().map((file) => {
         console.log(file);
@@ -33,16 +44,16 @@ ParrotConstructor.prototype.setBaseParrot = function(parrotType) {
 
 ParrotConstructor.prototype.addOverlayImage = function(overlay) {
     return this.imageFactory.get(overlay).then((image) => {
-        this.parrotFrameHandlers.map(handler => {
+        this.getFramesHandlers().map(handler => {
             handler.addImage(image);
         });
     });
 }
 
 ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX, offsetY, width, height) {
-    let followingFrames = config.followingFrames;
+    let followingFrames = this.parrotConfig.getFollowingFrames();
     return this.imageFactory.get(overlay).then((image) => {
-        this.parrotFrameHandlers.map((handler, index) => {
+        this.getFramesHandlers().map((handler, index) => {
             handler.addResizedImage(image, 
                                     followingFrames[index].x + (offsetX || 0), 
                                     followingFrames[index].y + (offsetY || 0), 
@@ -53,7 +64,7 @@ ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX
 }
 
 ParrotConstructor.prototype.finish = function() {
-    this.parrotFrameHandlers.forEach(handler => {
+    this.getFramesHandlers().forEach(handler => {
         this.encoder.addFrame(handler.getFrame());
     });
     this.encoder.finish();
