@@ -1,9 +1,10 @@
 var parrotConfig = require("./parrot");
 
 var config = {
+    flipY:true,
     followingFrames:parrotConfig.followingFrames.map(frame => {
         return {
-            x: 18 - frame.x,
+            x: 25 - frame.x,
             y: frame.y
         };
     })

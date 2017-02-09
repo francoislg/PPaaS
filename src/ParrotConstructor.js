@@ -50,17 +50,36 @@ ParrotConstructor.prototype.addOverlayImage = function(overlay) {
     });
 }
 
-ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX, offsetY, width, height) {
+ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX, offsetY, width, height, flipX, flipY) {
     let followingFrames = this.parrotConfig.getFollowingFrames();
+
+    if(this.parrotConfig.shouldFlipX()) {
+        flipX = !flipX;
+    }
+    if(this.parrotConfig.shouldFlipY()) {
+        flipY = !flipY;
+    }
+
     return this.imageFactory.get(overlay).then((image) => {
+        let imageHeight = parseInt(height || image.height);
+        let imageWidth = parseInt(width || image.width);
+
         this.getFramesHandlers().map((handler, index) => {
             handler.addResizedImage(image, 
-                                    followingFrames[index].x + (offsetX || 0), 
-                                    followingFrames[index].y + (offsetY || 0), 
-                                    width || image.width, 
-                                    height || image.height);
-        })
-    })
+                                    flipPositionIfActivated(followingFrames[index].x, imageWidth, flipY) + (offsetX || 0), 
+                                    flipPositionIfActivated(followingFrames[index].y, imageHeight, flipX) + (offsetY || 0), 
+                                    flipSizeIfActivated(imageWidth, flipY), 
+                                    flipSizeIfActivated(imageHeight, flipX));
+        });
+    });
+}
+
+function flipPositionIfActivated(currentPosition, size, flip) {
+    return flip ? (currentPosition + size) : currentPosition;
+}
+
+function flipSizeIfActivated(currentSize, flip) {
+    return flip ? currentSize * -1 : currentSize;
 }
 
 ParrotConstructor.prototype.finish = function() {
