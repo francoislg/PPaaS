@@ -54,5 +54,3 @@ Note that the changing the base parrot also supports all the other parameters.
 https://ppaas.herokuapp.com/partyparrot/rightparrot
 
 Here is the result: ![Right Parrot](https://ppaas.herokuapp.com/partyparrot/rightparrot "Right Parrot")
-
-https://ppaas.herokuapp.com/baseparrots returns the list of available parrots.
