@@ -1,6 +1,7 @@
 const ParrotConstructor = require("./src/ParrotConstructor");
 const ParrotOptionsValidator = require("./src/ParrotOptionsValidator");
 const path = require("path");
+const fs = require('fs')
 const express = require("express");
 const request = require("request-promise");
 
@@ -8,6 +9,12 @@ var app = express();
 
 app.get("/partyparrot", (req, res, done) => {
     handleRequest(res, req.query);
+});
+
+app.get("/baseparrots", (req, res, done) => {
+    let srcpath = "./baseparrots";
+    let folders = fs.readdirSync(path.resolve(srcpath)).filter(file => fs.statSync(path.join(srcpath, file)).isDirectory());
+    res.end(`["${folders.join('","')}"]`);
 });
 
 app.get("/partyparrot/:baseparrot", (req, res, done) => {
