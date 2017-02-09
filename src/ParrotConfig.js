@@ -1,6 +1,6 @@
 function ParrotConfig(parrotType) {
     this.parrotType = parrotType;
-    this.parrotConfig = require("./parrotConfigs/" + parrotType);
+    this.parrotConfig = require("./parrotconfigs/" + parrotType);
 }
 
 ParrotConfig.prototype.getParrotType = function() {
