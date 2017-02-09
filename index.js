@@ -20,7 +20,9 @@ function handleRequest(res, queryParams) {
                                                                         parseInt(queryParams.overlayOffsetX), 
                                                                         parseInt(queryParams.overlayOffsetY),
                                                                         queryParams.overlayWidth,
-                                                                        queryParams.overlayHeight);
+                                                                        queryParams.overlayHeight,
+                                                                        queryParams.flipOverlayX,
+                                                                        queryParams.flipOverlayY);
         promises.push(overlayPromise);
     }
     if (promises.length > 0) {
