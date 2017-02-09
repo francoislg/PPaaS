@@ -28,6 +28,8 @@ To solve this problem, it is possible to adjust it the overlay with the followin
 * overlayWidth
 * overlayOffsetX
 * overlayOffsetY
+* flipOverlayY
+* flipOverlayX
 
 https://ppaas.herokuapp.com/partyparrot?overlay=http://i.imgur.com/QJ41dQb.png&overlayWidth=15&overlayHeight=15&overlayOffsetX=-7&overlayOffsetY=-3
 
@@ -40,3 +42,11 @@ You can adjust the delay between frames using the delay query parameter:
 https://ppaas.herokuapp.com/partyparrot?delay=20
 
 Here is the result: ![Fast Parrot](https://ppaas.herokuapp.com/partyparrot?delay=20 "Fast Parrot")
+
+## Base Parrot
+
+You can change the base parrot using `/partyparrot/:baseparrot`. The list of supported base parrots is in the `baseparrots` folder.
+
+https://ppaas.herokuapp.com/partyparrot/rightparrot
+
+Here is the result: ![Right Parrot](https://ppaas.herokuapp.com/partyparrot/rightparrot "Right Parrot")
