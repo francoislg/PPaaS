@@ -9,7 +9,7 @@ ParrotOptionsValidator.prototype.validate = function(options) {
 }
 
 ParrotOptionsValidator.prototype.isjmhobbs = function(url) {
-    return !url.startsWith("http://");
+    return !url.startsWith("http");
 }
 
 module.exports = ParrotOptionsValidator;
