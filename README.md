@@ -45,7 +45,11 @@ Here is the result: ![Fast Parrot](https://ppaas.herokuapp.com/partyparrot?delay
 
 ## Base Parrot
 
-You can change the base parrot using `/partyparrot/:baseparrot`. The list of supported base parrots is in the `baseparrots` folder.
+You can change the base parrot using `/partyparrot/:baseparrot`. 
+
+The list of supported base parrots is in the `baseparrots` folder.
+
+Note that the changing the base parrot also supports all the other parameters.
 
 https://ppaas.herokuapp.com/partyparrot/rightparrot
 
