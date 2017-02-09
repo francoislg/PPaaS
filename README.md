@@ -1,6 +1,9 @@
 # PPaaS
 Party Parrot as a Service
 
+## PPaaS UI
+You can use the [PPaaS UI](https://parrotify.github.io/) to create party parrots in a friendlier manner (see its [GitHub repo](https://github.com/parrotify/parrotify.github.io)).
+
 ## Basic call
 
 https://ppaas.herokuapp.com/partyparrot
