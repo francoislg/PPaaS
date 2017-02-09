@@ -10,6 +10,11 @@ app.get("/partyparrot", (req, res, done) => {
     handleRequest(res, req.query);
 });
 
+app.get("/partyparrot/:baseparrot", (req, res, done) => {
+    req.query.baseparrot = req.params.baseparrot;
+    handleRequest(res, req.query);
+});
+
 function handleRequest(res, queryParams) {
     let validator = new ParrotOptionsValidator();
     
@@ -28,14 +33,18 @@ function constructParrot(res, queryParams) {
 
     let parrotConstructor = new ParrotConstructor(res, queryParams);
     var promises = [];
+    if(queryParams.baseparrot) {
+        parrotConstructor.setBaseParrot(queryParams.baseparrot);
+    }
+
     if(queryParams.overlay) {
         var overlayPromise = parrotConstructor.addFollowingOverlayImage(queryParams.overlay, 
                                                                         parseInt(queryParams.overlayOffsetX), 
                                                                         parseInt(queryParams.overlayOffsetY),
                                                                         queryParams.overlayWidth,
                                                                         queryParams.overlayHeight,
-                                                                        queryParams.flipOverlayX,
-                                                                        queryParams.flipOverlayY);
+                                                                        queryParams.flipOverlayX ? true : false,
+                                                                        queryParams.flipOverlayY ? true : false);
         promises.push(overlayPromise);
     }
     if (promises.length > 0) {
