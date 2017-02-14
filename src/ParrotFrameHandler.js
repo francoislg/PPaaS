@@ -1,12 +1,13 @@
 const fs = require('fs');
-const config = require("./config");
 const Canvas = require('canvas');
 const Image = Canvas.Image;
 
-function ParrotFrameHandler() {
-    this.context = new Canvas(config.WIDTH, config.HEIGHT).getContext('2d');
-    this.context.fillStyle = "rgba(255, 255, 255, 0)";
-    this.context.fillRect(0, 0, config.WIDTH, config.HEIGHT);
+function ParrotFrameHandler(parrotConfig) {
+    let width = parrotConfig.getWidth();
+    let height = parrotConfig.getHeight();
+    this.context = new Canvas(width, height).getContext('2d');
+    this.context.fillStyle = "rgba(255,255,255,0)";
+    this.context.fillRect(0, 0, width, height);
 }
 
 ParrotFrameHandler.prototype.addImage = function(image, offsetX, offsetY) {
