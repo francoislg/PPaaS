@@ -7,15 +7,16 @@ const config = require("./config");
 
 function ParrotConstructor(writeStream, parrotConstructorConfiguration) {
     this.imageFactory = new ImageFactory();
+    this.setBaseParrot("parrot");
+}
 
-    this.encoder = new GIFEncoder(config.WIDTH, config.HEIGHT);
+ParrotConstructor.prototype.start = function(writeStream, configuration) {
+    this.encoder = new GIFEncoder(this.parrotConfig.getWidth(), this.parrotConfig.getHeight());
     this.encoder.createReadStream().pipe(writeStream);
     this.encoder.start();
     this.encoder.setTransparent("#000000");
     this.encoder.setRepeat(0);
-    this.encoder.setDelay(parrotConstructorConfiguration.delay || 40);
-
-    this.setBaseParrot(parrotConstructorConfiguration.baseParrot || "parrot");
+    this.encoder.setDelay(configuration.delay || 40);
 }
 
 ParrotConstructor.prototype.setBaseParrot = function(parrotType) {
@@ -36,7 +37,7 @@ ParrotConstructor.prototype.initializeFramesHandlers = function() {
         console.log(file);
         return this.imageFactory.fromFileSync(file);
     }).map((image) => {
-        var frameHandler = new ParrotFrameHandler();
+        var frameHandler = new ParrotFrameHandler(this.parrotConfig);
         frameHandler.addImage(image);
         return frameHandler;
     });

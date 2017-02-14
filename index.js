@@ -38,11 +38,13 @@ function constructParrot(res, queryParams) {
     let fileName = "generatedparrot.gif";
     res.writeHead(200, { "Content-Type":"image/gif" });
 
-    let parrotConstructor = new ParrotConstructor(res, queryParams);
+    let parrotConstructor = new ParrotConstructor();
     var promises = [];
     if(queryParams.baseparrot) {
         parrotConstructor.setBaseParrot(queryParams.baseparrot);
     }
+
+    parrotConstructor.start(res, queryParams);
 
     if(queryParams.overlay) {
         var overlayPromise = parrotConstructor.addFollowingOverlayImage(queryParams.overlay, 

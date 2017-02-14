@@ -1,6 +1,16 @@
+const config = require("./config");
+
 function ParrotConfig(parrotType) {
     this.parrotType = parrotType;
     this.parrotConfig = require("./parrotconfigs/" + parrotType);
+}
+
+ParrotConfig.prototype.getHeight = function() {
+    return this.parrotConfig.height || config.HEIGHT;
+}
+
+ParrotConfig.prototype.getWidth = function() {
+    return this.parrotConfig.width || config.WIDTH;
 }
 
 ParrotConfig.prototype.getParrotType = function() {
