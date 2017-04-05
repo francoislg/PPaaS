@@ -12,21 +12,21 @@ var config = {
     },
     // Flipped
     {
-        x:16, y:14, flipY: true
+        x:23, y:14, flipY: true
     },{
-        x:20, y:12, flipY: true
+        x:27, y:12, flipY: true
     },{
-        x:22, y:11, flipY: true
+        x:29, y:11, flipY: true
     },{
-        x:22, y:10, flipY: true
+        x:28, y:10, flipY: true
     },{
-        x:20, y:9, flipY: true
+        x:26, y:9, flipY: true
     },
     // Last two extra frames
     {
-        x:15, y:9, flipY: true
+        x:22, y:9, flipY: true
     },{
-        x:16, y:7
+        x:13, y:7
     }]
 }
 
