@@ -66,11 +66,15 @@ ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX
         let imageWidth = parseInt(width || image.width);
 
         this.getFramesHandlers().map((handler, index) => {
+            let currentFrame = followingFrames[index];
+            let shouldFlipX = currentFrame.flipX ? !flipX : flipX;
+            let shouldFlipY = currentFrame.flipY ? !flipY : flipY;
+
             handler.addResizedImage(image, 
-                                    flipPositionIfActivated(followingFrames[index].x, imageWidth, flipY) + (offsetX || 0), 
-                                    flipPositionIfActivated(followingFrames[index].y, imageHeight, flipX) + (offsetY || 0), 
-                                    flipSizeIfActivated(imageWidth, flipY), 
-                                    flipSizeIfActivated(imageHeight, flipX));
+                                    flipPositionIfActivated(followingFrames[index].x, imageWidth, shouldFlipY) + (offsetX || 0), 
+                                    flipPositionIfActivated(followingFrames[index].y, imageHeight, shouldFlipX) + (offsetY || 0), 
+                                    flipSizeIfActivated(imageWidth, shouldFlipY), 
+                                    flipSizeIfActivated(imageHeight, shouldFlipX));
         });
     });
 }
