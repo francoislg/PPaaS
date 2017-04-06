@@ -57,6 +57,8 @@ Here is the result: ![Right Parrot](https://ppaas.herokuapp.com/partyparrot/righ
 
 For a bigger party:
 
+https://ppaas.herokuapp.com/partyparrot/mega?overlay=http://vignette3.wikia.nocookie.net/runescape2/images/0/0a/Wizard_hat_(t)_detail.png&overlayWidth=100&overlayHeight=100&overlayOffsetY=-150
+
 ![Mega Wizard Parrot](https://ppaas.herokuapp.com/partyparrot/mega?overlay=http://vignette3.wikia.nocookie.net/runescape2/images/0/0a/Wizard_hat_(t)_detail.png&overlayWidth=100&overlayHeight=100&overlayOffsetY=-150? "Mega Wizard Parrot")
 
 https://ppaas.herokuapp.com/baseparrots returns the list of available parrots.
