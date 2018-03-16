@@ -33,4 +33,8 @@ ParrotConfig.prototype.shouldFlipY = function() {
     return this.parrotConfig.flipY || false;
 }
 
+ParrotConfig.prototype.getDefaultColors = function() {
+    return this.parrotConfig.defaultColors || config.defaultColors;
+}
+
 module.exports = ParrotConfig;

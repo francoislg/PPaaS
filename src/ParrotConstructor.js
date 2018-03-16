@@ -5,7 +5,7 @@ const ParrotConfig = require("./ParrotConfig");
 const ImageFactory = require("./ImageFactory");
 const config = require("./config");
 
-function ParrotConstructor(writeStream, parrotConstructorConfiguration) {
+function ParrotConstructor() {
     this.imageFactory = new ImageFactory();
     this.setBaseParrot("parrot");
 }
@@ -32,15 +32,23 @@ ParrotConstructor.prototype.getFramesHandlers = function() {
 
 ParrotConstructor.prototype.initializeFramesHandlers = function() {
     let framesReader = new ParrotFramesReader(this.parrotConfig);
+    const colors = this.parrotConfig.getDefaultColors();
 
     this.parrotFrameHandlers = framesReader.getFrames().map((file) => {
         console.log(file);
         return this.imageFactory.fromFileSync(file);
-    }).map((image) => {
+    }).map((image, i) => {
         var frameHandler = new ParrotFrameHandler(this.parrotConfig);
         frameHandler.addImage(image);
+        frameHandler.applyColor(colors[i]);
         return frameHandler;
     });
+}
+
+ParrotConstructor.prototype.setColors = function(colors) {
+    return this.getFramesHandlers().map((handler, i) => {
+        handler.applyColor(colors[i] || "ffffff");
+    })
 }
 
 ParrotConstructor.prototype.addOverlayImage = function(overlay) {
