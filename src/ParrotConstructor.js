@@ -32,7 +32,6 @@ ParrotConstructor.prototype.getFramesHandlers = function() {
 
 ParrotConstructor.prototype.initializeFramesHandlers = function() {
     let framesReader = new ParrotFramesReader(this.parrotConfig);
-    const colors = this.parrotConfig.getDefaultColors();
 
     this.parrotFrameHandlers = framesReader.getFrames().map((file) => {
         console.log(file);
@@ -40,14 +39,15 @@ ParrotConstructor.prototype.initializeFramesHandlers = function() {
     }).map((image, i) => {
         var frameHandler = new ParrotFrameHandler(this.parrotConfig);
         frameHandler.addImage(image);
-        frameHandler.applyColor(colors[i]);
         return frameHandler;
     });
 }
 
-ParrotConstructor.prototype.setColors = function(colors) {
+ParrotConstructor.prototype.setColors = function(colorsToSet) {
+    const colorValues = colorsToSet || this.parrotConfig.getDefaultColors();
+
     return this.getFramesHandlers().map((handler, i) => {
-        handler.applyColor(colors[i] || "ffffff");
+        handler.applyColor(colorValues[i % colorValues.length]);
     })
 }
 

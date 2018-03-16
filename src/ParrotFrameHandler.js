@@ -19,13 +19,8 @@ ParrotFrameHandler.prototype.applyColor = function(color) {
         let red = imageData.data[index];
         let green = imageData.data[index + 1];
         let blue = imageData.data[index + 2];
-        console.log({
-            r:red,
-            g:green,
-            b: blue
-        });
-        // Grey parrot color test
-        if (red == 138 && green == 138 && blue == 138) {
+        let alpha = imageData.data[index + 3];
+        if (red == 231 && green == 231 && blue == 231 && alpha == 255) {
             imageData.data[index] = targetRed;
             imageData.data[index + 1] = targetGreen;
             imageData.data[index + 2] = targetBlue;
