@@ -44,8 +44,10 @@ function constructParrot(res, queryParams) {
         parrotConstructor.setBaseParrot(queryParams.baseparrot);
     }
 
-    parrotConstructor.start(res, queryParams);
-    parrotConstructor.setColors(queryParams.colors ? queryParams.colors.split(",") : null);
+    parrotConstructor.start(res, {
+        delay: queryParams.delay,
+        colors: queryParams.colors ? queryParams.colors.split(",") : null
+    });
 
     if(queryParams.overlay) {
         var overlayPromise = parrotConstructor.addFollowingOverlayImage(queryParams.overlay, 

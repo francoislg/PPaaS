@@ -20,7 +20,7 @@ ParrotFrameHandler.prototype.applyColor = function(color) {
         let green = imageData.data[index + 1];
         let blue = imageData.data[index + 2];
         let alpha = imageData.data[index + 3];
-        if (red == 231 && green == 231 && blue == 231 && alpha == 255) {
+        if (red == 255 && green == 255 && blue == 255 && alpha == 255) {
             imageData.data[index] = targetRed;
             imageData.data[index + 1] = targetGreen;
             imageData.data[index + 2] = targetBlue;

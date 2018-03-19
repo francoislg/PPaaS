@@ -17,6 +17,8 @@ ParrotConstructor.prototype.start = function(writeStream, configuration) {
     this.encoder.setTransparent("#000000");
     this.encoder.setRepeat(0);
     this.encoder.setDelay(configuration.delay || 40);
+    this.numberOfLoops = Math.ceil((configuration.colors ? configuration.colors.length : 1) / this.parrotConfig.getNumberOfFrames());
+    this.colors = configuration.colors;
 }
 
 ParrotConstructor.prototype.setBaseParrot = function(parrotType) {
@@ -31,24 +33,32 @@ ParrotConstructor.prototype.getFramesHandlers = function() {
 }
 
 ParrotConstructor.prototype.initializeFramesHandlers = function() {
-    let framesReader = new ParrotFramesReader(this.parrotConfig);
+    const loadWhiteParrot = !!this.colors;
+    const framesReader = new ParrotFramesReader(this.parrotConfig, loadWhiteParrot);
 
-    this.parrotFrameHandlers = framesReader.getFrames().map((file) => {
-        console.log(file);
-        return this.imageFactory.fromFileSync(file);
-    }).map((image, i) => {
+    const mapImageToFrameHandler = (image) => {
         var frameHandler = new ParrotFrameHandler(this.parrotConfig);
         frameHandler.addImage(image);
         return frameHandler;
+    };
+    const allImages = framesReader.getFrames().map((file) => {
+        console.log(file);
+        return this.imageFactory.fromFileSync(file);
     });
-}
 
-ParrotConstructor.prototype.setColors = function(colorsToSet) {
-    const colorValues = colorsToSet || this.parrotConfig.getDefaultColors();
+    let allFrameHandlers = [];
 
-    return this.getFramesHandlers().map((handler, i) => {
-        handler.applyColor(colorValues[i % colorValues.length]);
-    })
+    for (let i=0; i<this.numberOfLoops; i++) {
+        allFrameHandlers = allFrameHandlers.concat(allImages.map(mapImageToFrameHandler));
+    }
+
+    if (this.colors && this.colors.length > 0) {
+        allFrameHandlers.forEach((frameHandler, i) => {
+            frameHandler.applyColor(this.colors[i % this.colors.length]);
+        })
+    }
+
+    this.parrotFrameHandlers = allFrameHandlers;
 }
 
 ParrotConstructor.prototype.addOverlayImage = function(overlay) {
