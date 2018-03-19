@@ -37,11 +37,19 @@ Here is the result: ![Upvote Party Parrot](https://ppaas.herokuapp.com/partyparr
 
 ## Delay
 
-You can adjust the delay between frames using the delay query parameter: 
+You can adjust the delay between frames using the `delay` query parameter: 
 
 https://ppaas.herokuapp.com/partyparrot?delay=20
 
 Here is the result: ![Fast Parrot](https://ppaas.herokuapp.com/partyparrot?delay=20 "Fast Parrot")
+
+## Colors
+
+You can set the colors for each frame using the `colors` query parameter:
+
+https://ppaas.herokuapp.com/partyparrot/middleparrot?colors=00CCCC,00AAAA,008888,006666,004444&delay=50
+
+Here is the result: ![Green-ish Middle Parrot](https://ppaas.herokuapp.com/partyparrot/middleparrot?colors=00CCCC,00AAAA,008888,006666,004444&delay=50 "Green-ish Middle Parrot")
 
 ## Base Parrot
 
