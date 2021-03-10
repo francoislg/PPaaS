@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Canvas = require('canvas');
+const Canvas = require('canvas').Canvas;
 const Image = Canvas.Image;
 
 function ParrotFrameHandler(parrotConfig) {
