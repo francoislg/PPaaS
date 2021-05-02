@@ -3,7 +3,7 @@ const leftpad = require("left-pad")
 
 function ParrotFramesReader(parrotConfig, whiteVersion) {
     this.parrotConfig = parrotConfig;
-    this.baseParrotsPath = whiteVersion ? config.whiteBaseParrots : config.baseParrots;
+    this.baseParrotsPath = config.baseParrots;
 }
 
 ParrotFramesReader.prototype.getFrames = function() {

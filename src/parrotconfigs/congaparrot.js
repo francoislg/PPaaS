@@ -1,6 +1,8 @@
+var timesBigger = 9; // Very approximately accurate.
+
 var config = {
-    width:30,
-    height:25,
+    width:320,
+    height:229,
     followingFrames:[{
         x:16, y:11
     },{
@@ -53,7 +55,12 @@ var config = {
         }]
     },{
         x:12, y:12
-    }]
+    }].map(frame => {
+        return {
+            x: frame.x * timesBigger,
+            y: frame.y * timesBigger
+        };
+    })
 }
 
 module.exports = config;
