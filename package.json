@@ -2,9 +2,9 @@
   "name": "ppaas",
   "version": "1.0.0",
   "description": "Party Parrot as a Service",
-  "main": "app/index.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node app/index.js",
+    "start": "node api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "vercel-build": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/"
   },
@@ -14,7 +14,7 @@
   "author": "flguillemette",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.9.1",
+    "canvas": "2.9.x",
     "express": "^4.14.0",
     "gifencoder": "^2.0.1",
     "left-pad": "^1.1.3",
