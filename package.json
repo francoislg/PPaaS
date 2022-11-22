@@ -13,7 +13,7 @@
   "author": "flguillemette",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.7.0",
+    "canvas": "^2.10.2",
     "express": "^4.14.0",
     "gifencoder": "^2.0.1",
     "left-pad": "^1.1.3",
