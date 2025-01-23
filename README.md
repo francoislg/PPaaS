@@ -77,5 +77,3 @@ https://partyparrotasaservice.vercel.app/api/partyparrot/mega?overlay=http://vig
 ![Mega Wizard Parrot](https://partyparrotasaservice.vercel.app/api/partyparrot/mega?v2&overlayWidth=100&overlayHeight=100&overlayOffsetY=-150&overlay=http://vignette3.wikia.nocookie.net/runescape2/images/0/0a/Wizard_hat_(t)_detail.png? "Mega Wizard Parrot")
 
 https://partyparrotasaservice.vercel.app/api/baseparrots returns the list of available parrots.
-
-## Weird things
