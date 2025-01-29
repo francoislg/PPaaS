@@ -1,125 +1,146 @@
-const GIFEncoder = require('gifencoder');
+const { GifEncoder } = require("@skyra/gifenc");
 const ParrotFramesReader = require("./ParrotFramesReader");
 const ParrotFrameHandler = require("./ParrotFrameHandler");
 const ParrotConfig = require("./ParrotConfig");
-const ImageFactory = require("./ImageFactory");
-const config = require("./config");
 
-function ParrotConstructor() {
-    this.imageFactory = new ImageFactory();
+class ParrotConstructor {
+  constructor(imageFactory) {
+    this.imageFactory = imageFactory;
     this.setBaseParrot("parrot");
-}
+  }
 
-ParrotConstructor.prototype.start = function(writeStream, configuration) {
-    this.encoder = new GIFEncoder(this.parrotConfig.getWidth(), this.parrotConfig.getHeight());
+  async start(writeStream, configuration) {
+    this.encoder = new GifEncoder(
+      this.parrotConfig.getWidth(),
+      this.parrotConfig.getHeight()
+    );
+    this.encoder.setRepeat(0);
+    this.encoder.setTransparent("#000000");
+    this.encoder.setDelay(configuration.delay || 40);
     this.encoder.createReadStream().pipe(writeStream);
     this.encoder.start();
-    this.encoder.setTransparent("#000000");
-    this.encoder.setRepeat(0);
-    this.encoder.setDelay(configuration.delay || 40);
-    this.numberOfLoops = Math.ceil((configuration.colors ? configuration.colors.length : 1) / this.parrotConfig.getNumberOfFrames());
+
+    this.numberOfLoops = Math.ceil(
+      (configuration.colors ? configuration.colors.length : 1) /
+        this.parrotConfig.getNumberOfFrames()
+    );
     this.colors = configuration.colors;
-}
+    await this.initializeFramesHandlers();
+  }
 
-ParrotConstructor.prototype.setBaseParrot = function(parrotType) {
+  setBaseParrot(parrotType) {
     this.parrotConfig = new ParrotConfig(parrotType);
-}
+  }
 
-ParrotConstructor.prototype.getFramesHandlers = function() {
-    if(!this.parrotFrameHandlers) {
-        this.initializeFramesHandlers();
-    }
+  getFramesHandlers() {
     return this.parrotFrameHandlers;
-}
+  }
 
-ParrotConstructor.prototype.initializeFramesHandlers = function() {
+  async initializeFramesHandlers() {
     const loadWhiteParrot = !!this.colors;
-    const framesReader = new ParrotFramesReader(this.parrotConfig, loadWhiteParrot);
+    const framesReader = new ParrotFramesReader(
+      this.parrotConfig,
+      loadWhiteParrot
+    );
 
-    const mapImageToFrameHandler = (image) => {
-        var frameHandler = new ParrotFrameHandler(this.parrotConfig);
-        frameHandler.addImage(image);
-        return frameHandler;
-    };
-    const allImages = framesReader.getFrames().map((file) => {
-        console.log(file);
-        return this.imageFactory.fromFileSync(file);
-    });
+    const allImages = await Promise.all(
+      framesReader
+        .getFramePaths()
+        .map((file) => this.imageFactory.fromFile(file))
+    );
 
-    let allFrameHandlers = [];
+    /** @type {ParrotFrameHandler[]} */
+    const allFrameHandlers = [];
 
-    for (let i=0; i<this.numberOfLoops; i++) {
-        allFrameHandlers = allFrameHandlers.concat(allImages.map(mapImageToFrameHandler));
+    for (let i = 0; i < this.numberOfLoops; i++) {
+      allFrameHandlers.push(
+        ...allImages.map((image) => {
+          const frameHandler = new ParrotFrameHandler(this.parrotConfig);
+          frameHandler.addImage(image);
+          return frameHandler;
+        })
+      );
     }
 
     if (this.colors && this.colors.length > 0) {
-        allFrameHandlers.forEach((frameHandler, i) => {
-            frameHandler.applyColor(this.colors[i % this.colors.length]);
-        })
+      allFrameHandlers.forEach((frameHandler, i) => {
+        frameHandler.applyColor(this.colors[i % this.colors.length]);
+      });
     }
 
     this.parrotFrameHandlers = allFrameHandlers;
-}
+  }
 
-ParrotConstructor.prototype.addOverlayImage = function(overlay) {
-    return this.imageFactory.get(overlay).then((image) => {
-        this.getFramesHandlers().map(handler => {
-            handler.addImage(image);
-        });
+  async addOverlayImage(overlay) {
+    const image = await this.imageFactory.get(overlay);
+    this.getFramesHandlers().forEach((handler) => {
+      handler.addImage(image);
     });
-}
+  }
 
-ParrotConstructor.prototype.addFollowingOverlayImage = function(overlay, offsetX, offsetY, width, height, flipX, flipY) {
-    let followingFrames = this.parrotConfig.getFollowingFrames();
+  async addFollowingOverlayImage(
+    overlay,
+    offsetX,
+    offsetY,
+    width,
+    height,
+    flipX,
+    flipY
+  ) {
+    const followingFrames = this.parrotConfig.getFollowingFrames();
 
-    if(this.parrotConfig.shouldFlipX()) {
-        flipX = !flipX;
+    if (this.parrotConfig.shouldFlipX()) {
+      flipX = !flipX;
     }
-    if(this.parrotConfig.shouldFlipY()) {
-        flipY = !flipY;
+    if (this.parrotConfig.shouldFlipY()) {
+      flipY = !flipY;
     }
 
-    return this.imageFactory.get(overlay).then((image) => {
-        let imageHeight = parseInt(height || image.height);
-        let imageWidth = parseInt(width || image.width);
+    const image = await this.imageFactory.get(overlay);
+    const imageHeight = parseInt(height || image.height);
+    const imageWidth = parseInt(width || image.width);
 
-        let frameHandler = function(handler, frame) {
-            let shouldFlipX = frame.flipX ? !flipX : flipX;
-            let shouldFlipY = frame.flipY ? !flipY : flipY;
+    const frameHandler = (handler, frame) => {
+      const shouldFlipX = frame.flipX ? !flipX : flipX;
+      const shouldFlipY = frame.flipY ? !flipY : flipY;
 
-            handler.addResizedImage(image, 
-                                    flipPositionIfActivated(frame.x, imageWidth, shouldFlipY) + (offsetX || 0), 
-                                    flipPositionIfActivated(frame.y, imageHeight, shouldFlipX) + (offsetY || 0), 
-                                    flipSizeIfActivated(imageWidth, shouldFlipY), 
-                                    flipSizeIfActivated(imageHeight, shouldFlipX));
-        }
+      handler.addResizedImage(
+        image,
+        flipPositionIfActivated(frame.x, imageWidth, shouldFlipY) +
+          (offsetX || 0),
+        flipPositionIfActivated(frame.y, imageHeight, shouldFlipX) +
+          (offsetY || 0),
+        flipSizeIfActivated(imageWidth, shouldFlipY),
+        flipSizeIfActivated(imageHeight, shouldFlipX)
+      );
+    };
 
-        this.getFramesHandlers().map((handler, index) => {
-            let currentFrame = followingFrames[index];
-            if (currentFrame.multiple) {
-                currentFrame.multiple.forEach(frame => {
-                    frameHandler(handler, frame);
-                })
-            } else {
-                frameHandler(handler, currentFrame);
-            }
+    this.getFramesHandlers().forEach((handler, index) => {
+      const currentFrame = followingFrames[index];
+      if (currentFrame.multiple) {
+        currentFrame.multiple.forEach((frame) => {
+          frameHandler(handler, frame);
         });
+      } else {
+        frameHandler(handler, currentFrame);
+      }
     });
+  }
+
+  finish() {
+    this.getFramesHandlers().forEach((handler) => {
+      this.encoder.addFrame(handler.getFrame());
+    });
+    this.encoder.finish();
+  }
 }
 
 function flipPositionIfActivated(currentPosition, size, flip) {
-    return flip ? (currentPosition + size) : currentPosition;
+  return flip ? currentPosition + size : currentPosition;
 }
 
 function flipSizeIfActivated(currentSize, flip) {
-    return flip ? currentSize * -1 : currentSize;
-}
-
-ParrotConstructor.prototype.finish = function() {
-    this.getFramesHandlers().forEach(handler => {
-        this.encoder.addFrame(handler.getFrame());
-    });
-    this.encoder.finish();
+  return flip ? currentSize * -1 : currentSize;
 }
 
 module.exports = ParrotConstructor;

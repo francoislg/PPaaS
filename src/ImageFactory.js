@@ -1,7 +1,4 @@
-const fs = require("fs");
-const config = require("./config");
-const Image = require("@napi-rs/canvas").Image;
-const request = require("request").defaults({ encoding: null });
+const { loadImage } = require("@napi-rs/canvas");
 
 function ImageFactory() {
   this.loadedImages = {};
@@ -24,44 +21,22 @@ ImageFactory.prototype.get = function (image) {
   }
 };
 
-ImageFactory.prototype.fromFileSync = function (fileName) {
-  var img = new Image();
-  img.src = fs.readFileSync(fileName);
-  this.addToCache(fileName, img);
-  return img;
-};
-
 ImageFactory.prototype.isURL = function (url) {
   return url.indexOf("http") == 0;
 };
 
-ImageFactory.prototype.fromFile = function (fileName) {
-  return new Promise((resolve, reject) => {
-    if (this.isInCache(fileName)) {
-      resolve(this.getFromCache(fileName));
-    } else {
-      fs.readFile(fileName, (err, data) => {
-        if (!err) {
-          var img = new Image();
-          img.src = data;
-          this.addToCache(fileName, img);
-          resolve(img);
-        } else {
-          reject(err);
-        }
-      });
-    }
-  });
+ImageFactory.prototype.fromFile = async function (fileName) {
+  if (this.isInCache(fileName)) {
+    return this.getFromCache(fileName);
+  }
+
+  const image = await loadImage(fileName);
+  this.addToCache(fileName, image);
+  return image;
 };
 
 ImageFactory.prototype.fromUrl = function (url) {
-  return new Promise((resolve, reject) => {
-    request.get(url, (err, res, body) => {
-      var img = new Image();
-      img.src = body;
-      resolve(img);
-    });
-  });
+  return loadImage(url);
 };
 
 module.exports = ImageFactory;
