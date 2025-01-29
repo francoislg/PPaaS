@@ -1,6 +1,6 @@
 const fs = require("fs");
 const config = require("./config");
-const Image = require("canvas").Image;
+const Image = require("@napi-rs/canvas").Image;
 const request = require("request").defaults({ encoding: null });
 
 function ImageFactory() {
